@@ -1,0 +1,7 @@
+name = "ai-film-studio-api"
+main = "worker.js"
+compatibility_date = "2026-11-10"
+
+# Secrets are configured in Cloudflare dashboard, never committed.
+# OPENAI_API_KEY
+# STUDIO_ACCESS_TOKEN
