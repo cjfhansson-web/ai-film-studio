@@ -1,0 +1,37 @@
+name: AI Film Studio pilot checks
+on:
+  push:
+    branches:
+      - utveckling/videoanalys-20
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Python unit tests (no API key)
+        run: python -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Compile Python sources
+        run: python -m compileall -q tools tests
+      - name: Create synthetic footage and run real FFmpeg pipeline
+        run: |
+          mkdir -p /tmp/film-studio-ci
+          ffmpeg -hide_banner -loglevel error -f lavfi -i 'testsrc2=size=320x180:rate=25' -t 4 -c:v mpeg4 -y /tmp/film-studio-ci/a.mp4
+          ffmpeg -hide_banner -loglevel error -f lavfi -i 'color=c=blue:size=320x180:rate=25' -t 3 -c:v mpeg4 -y /tmp/film-studio-ci/b.mp4
+          python tools/analyze_video.py --output /tmp/film-studio-ci/analysis /tmp/film-studio-ci/a.mp4 /tmp/film-studio-ci/b.mp4
+          python tools/sample_frames.py /tmp/film-studio-ci/analysis/manifest.json --output /tmp/film-studio-ci/frames --interval 1
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          m=json.loads(Path('/tmp/film-studio-ci/frames/sampled-manifest.json').read_text())
+          assert len(m['sources'])==2
+          assert all(s['sampled_frames'] for s in m['sources'])
+          assert all((Path('/tmp/film-studio-ci/frames')/f['image']).exists() for s in m['sources'] for f in s['sampled_frames'])
+          print('FFmpeg integration passed:',sum(len(s['sampled_frames']) for s in m['sources']),'frames')
+          PY
