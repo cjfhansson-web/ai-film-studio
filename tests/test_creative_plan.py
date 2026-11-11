@@ -1,7 +1,7 @@
 import unittest
 from tools.validate_creative_plan import validate
 def manifest():
-    return {"sources":[{"id":"clip01","duration_seconds":10,"segments":[{"id":"s1","start_seconds":0,"end_seconds":10}]}]}
+    return {"sources":[{"id":"clip01","duration_seconds":10,"segments":[{"id":"s1","start_seconds":0,"end_seconds":10,"still_frames":[{"time_seconds":2,"image":"x.jpg"}]}]}]}
 def source():
     return {"kind":"source","source_id":"clip01","segment_id":"s1","source_in_seconds":1,"source_out_seconds":4,"timeline_duration_seconds":3,"still_frames":[{"time_seconds":2,"image":"x.jpg"}],"narrative_role":"Opening"}
 def pickup():
@@ -19,6 +19,9 @@ class CreativePlanTests(unittest.TestCase):
     def test_requires_existing_only_variant(self):
         p=plan();p["variants"][0]["shots"].append(pickup())
         self.assertTrue(any("only existing" in x for x in validate(p,manifest())))
+    def test_invented_still(self):
+        p=plan();p["variants"][0]["shots"][0]["still_frames"][0]["image"]="invented.jpg"
+        self.assertTrue(any("not present" in x for x in validate(p,manifest())))
     def test_missing_prompt(self):
         p=plan();del p["variants"][1]["shots"][1]["generation_prompt"]
         self.assertTrue(any("video prompt" in x for x in validate(p,manifest())))
