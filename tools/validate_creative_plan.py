@@ -38,13 +38,18 @@ def validate(plan,manifest):
                     errors.append(f"{name}: out of verified source range")
                 if finite(a) and finite(b) and abs((b-a)-d)>0.05:
                     errors.append(f"{name}: source and timeline durations differ")
-                if not shot.get("still_frames"):
+                if not isinstance(shot.get("still_frames"),list) or not shot["still_frames"]:
                     errors.append(f"{name}: missing still frames")
                 else:
+                    allowed={(f["image"],f["time_seconds"]) for f in seg.get("still_frames",[])}
                     for frame in shot["still_frames"]:
+                        if not isinstance(frame,dict):
+                            errors.append(f"{name}: invalid still frame");break
                         t=frame.get("time_seconds")
                         if not finite(t) or not finite(a) or not finite(b) or not a-0.001<=t<=b+0.001:
                             errors.append(f"{name}: still outside shot");break
+                        if (frame.get("image"),t) not in allowed:
+                            errors.append(f"{name}: still not present in source manifest");break
             else:
                 original_only=False
                 if not shot.get("creative_reason"):errors.append(f"{name}: missing creative reason")
