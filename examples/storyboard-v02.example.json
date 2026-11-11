@@ -1,0 +1,69 @@
+{
+  "schema_version": "0.2",
+  "project": {
+    "title": "Exempelfilm",
+    "idea": "Användarens egen idé",
+    "target_duration_seconds": 30,
+    "frame_rate": 30
+  },
+  "source_manifest": "analysis/manifest.json",
+  "variants": [
+    {
+      "id": "A",
+      "title": "Befintligt material",
+      "uses_new_footage": false,
+      "shots": [
+        {
+          "id": "shot-01",
+          "kind": "source",
+          "source_id": "clip01",
+          "segment_id": "clip01-s001",
+          "source_in_seconds": 1,
+          "source_out_seconds": 4,
+          "timeline_duration_seconds": 3,
+          "still_frames": [
+            {
+              "time_seconds": 1,
+              "image": "clip01_segment001.jpg"
+            }
+          ],
+          "narrative_role": "Öppning",
+          "creative_reason": "Skapa nyfikenhet",
+          "treatment": {
+            "crop_aspect_ratio": "2.39:1",
+            "zoom": 1.1,
+            "position": {
+              "x": 0.5,
+              "y": 0.5
+            },
+            "look_name": "Kall, låg mättnad",
+            "resolve_instructions": "Inspector > Transform: justera Zoom och Position; Color: sänk Saturation försiktigt."
+          }
+        }
+      ]
+    },
+    {
+      "id": "B",
+      "title": "Med kompletterande scen",
+      "uses_new_footage": true,
+      "shots": [
+        {
+          "id": "shot-02",
+          "kind": "pickup",
+          "timeline_duration_seconds": 3,
+          "narrative_role": "Vändpunkt",
+          "creative_reason": "En visuell paus saknas i befintligt material",
+          "reference_image": null,
+          "reference_image_status": "not_generated",
+          "cinematography_brief": "Närbild på en stilla vattendroppe. Mörk bakgrund, sidoljus, låst kamera, 16:9, tre sekunder.",
+          "generation_prompt": "Cinematic macro close-up of a suspended water droplet, dark background, dramatic sidelight, static camera, realistic optics, 16:9, three seconds, no text.",
+          "treatment": {
+            "crop_aspect_ratio": "16:9",
+            "look_name": "Mörk och kontrastrik",
+            "resolve_instructions": "Color: bevara högdagrar och fördjupa bakgrunden."
+          }
+        }
+      ]
+    }
+  ]
+}
