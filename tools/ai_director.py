@@ -10,7 +10,10 @@ import sys
 import urllib.error
 import urllib.request
 from pathlib import Path
-from validate_creative_plan import validate
+try:
+    from .validate_creative_plan import validate
+except ImportError:  # direct invocation: python3 tools/ai_director.py
+    from validate_creative_plan import validate
 
 API="https://api.openai.com/v1/chat/completions"
 def collect(manifest,folder,max_images=24):
