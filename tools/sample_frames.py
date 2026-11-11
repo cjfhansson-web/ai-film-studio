@@ -6,7 +6,6 @@ import math
 import shutil
 import subprocess
 from pathlib import Path
-from tools.analyze_video import probe
 
 def sample_times(start,end,interval=1.0):
     if not all(math.isfinite(v) for v in (start,end,interval)) or start<0 or end<=start or interval<=0:
