@@ -33,7 +33,7 @@ def scene_times(path,duration,threshold=0.30):
     times=[]
     for line in result.stderr.splitlines():
         if "showinfo" in line:
-            m=re.search(r"pts_time:\\s*([0-9.]+)",line)
+            m=re.search(r"pts_time:\s*([0-9.]+)",line)
             if m:
                 t=float(m.group(1))
                 if 0<t<duration: times.append(t)
