@@ -17,6 +17,8 @@ jobs:
           python-version: '3.11'
       - name: Python unit tests (no API key)
         run: python -m unittest discover -s tests -p 'test_*.py' -v
+      - name: AI director API offline tests
+        run: node --test director-api.test.mjs
       - name: Compile Python sources
         run: python -m compileall -q tools tests
       - name: Create synthetic footage and run real FFmpeg pipeline
