@@ -12,7 +12,7 @@
 <button id="prepare">Förbered bildrutor</button><p id="status" role="status">Inga filmer analyserade.</p><div id="thumbs"></div></section>
 <section><h2>2. AI-anslutning</h2>
 <p class="muted">Ange den publicerade Cloudflare Worker-adressen och åtkomsttoken för just detta test. Token sparas inte i webbläsaren. Klistra aldrig in OpenAI API-nyckeln här.</p>
-<label>Worker-URL<input id="endpoint" value="https://ai-film-studio-api.cjfhansson.workers.dev" readonly></label>
+<label>Worker-URL<input id="endpoint" value="https://ai-film-studio-director-test.cjfhansson.workers.dev" readonly></label>
 <label>Studio-åtkomsttoken<input id="token" type="password" autocomplete="off" placeholder="Ange din egen åtkomsttoken"></label><p class="muted">Cloudflare visar inte gamla hemliga tokenvärden. Byt inte token förrän serverns nya funktion har publicerats. Lämna fältet tomt tills dess.</p>
 <button id="run" disabled>Skapa två AI-klippförslag</button><p id="ai-status" role="status"></p></section>
 <section id="results" hidden><h2>3. AI:s klippförslag</h2><div id="variants"></div><button id="download">Spara klippplan som JSON</button></section>
