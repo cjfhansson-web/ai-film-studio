@@ -1,4 +1,4 @@
-name = "ai-film-studio-api"
+name = "ai-film-studio-director-test"
 main = "worker.js"
 compatibility_date = "2026-11-10"
 
