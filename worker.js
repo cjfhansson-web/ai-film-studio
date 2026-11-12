@@ -1,3 +1,4 @@
+import {generateDirectorPlan} from "./director-api.mjs";
 // AI Film Studio — protected prototype API
 // Configure OPENAI_API_KEY and STUDIO_ACCESS_TOKEN as Cloudflare Secrets.
 // Do not put secret values in this public repository.
@@ -22,7 +23,7 @@ export default {
         "Access-Control-Allow-Headers":"Content-Type, Authorization",
         "Access-Control-Max-Age":"600","Vary":"Origin"}});
     }
-    if (request.method !== "POST" || url.pathname !== "/analyze")
+    if (request.method !== "POST" || !["/analyze","/director"].includes(url.pathname))
       return reply({error:"Not found"},404,origin);
     if (origin !== ORIGIN) return reply({error:"Forbidden origin"},403);
     if (!env.OPENAI_API_KEY || !env.STUDIO_ACCESS_TOKEN)
@@ -37,6 +38,10 @@ export default {
       if (new TextEncoder().encode(raw).length > 1200000) return reply({error:"Request too large"},413,origin);
       body = JSON.parse(raw);
     } catch { return reply({error:"Invalid JSON"},400,origin); }
+    if (url.pathname === "/director") {
+      const result = await generateDirectorPlan(body,env.OPENAI_API_KEY);
+      return reply(result.status === 200 ? {plan:result.plan,usage:result.usage} : {error:result.error},result.status,origin);
+    }
     const frames = body?.images;
     if (!Array.isArray(frames) || frames.length < 1 || frames.length > 8 ||
       !frames.every(f => typeof f?.filename === "string" && f.filename.length <= 120 &&
